@@ -15,7 +15,8 @@
 
     <script type="text/babel">
         const { useState } = React;
-        const { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } = Recharts;
+        // FIX: Use window for Recharts components
+        const { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } = window;
 
         const GlassesPrescriptionChart = () => {
           const [selectedMetrics, setSelectedMetrics] = useState({
