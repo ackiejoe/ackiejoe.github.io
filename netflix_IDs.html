@@ -483,17 +483,27 @@
     </div>
   </div>
   <script>
-    // Collapsible logic
+    // Collapsible logic: expanding one collapses all others
     function toggleSection(name) {
-      const section = document.getElementById('section-' + name);
-      const toggle = document.getElementById('toggle-' + name);
-      if (section.style.display === 'none') {
-        section.style.display = '';
-        toggle.textContent = '−';
-      } else {
-        section.style.display = 'none';
-        toggle.textContent = '+';
-      }
+      const sections = [
+        'action','anime','children','classic','comedies','cult','documentaries','dramas','faith','foreign','gay','horror','independent','music','musicals','romantic','scifi','sports','thrillers','tv'
+      ];
+      sections.forEach(function(sec) {
+        const section = document.getElementById('section-' + sec);
+        const toggle = document.getElementById('toggle-' + sec);
+        if (sec === name) {
+          if (section.style.display === 'none') {
+            section.style.display = '';
+            toggle.textContent = '−';
+          } else {
+            section.style.display = 'none';
+            toggle.textContent = '+';
+          }
+        } else {
+          section.style.display = 'none';
+          toggle.textContent = '+';
+        }
+      });
     }
   </script>
 </body>
