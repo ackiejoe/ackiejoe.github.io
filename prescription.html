@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glasses Prescription Tracker</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/recharts/2.8.0/Recharts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+        const { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } = Recharts;
+
+        const GlassesPrescriptionChart = () => {
+          const [selectedMetrics, setSelectedMetrics] = useState({
+            'OD-SPH': true,
+            'OD-CYL': true,
+            'OS-SPH': true,
+            'OS-CYL': true,
+            'OD-Axis': true,
+            'OS-Axis': true
+          });
+
+          const [currentTheme, setCurrentTheme] = useState('dark');
+          
+          const [collapsedSections, setCollapsedSections] = useState({
+            historical: true,
+            predictions: true,
+            methodology: true
+          });
+
+          const toggleSection = (section) => {
+            setCollapsedSections(prev => ({
+              ...prev,
+              [section]: !prev[section]
+            }));
+          };
+
+          const themes = {
+            default: {
+              name: 'Default',
+              background: 'bg-white',
+              chartBackground: 'bg-gray-50',
+              textPrimary: 'text-gray-800',
+              textSecondary: 'text-gray-700',
+              gridColor: '#e5e7eb',
+              axisColor: '#6b7280',
+              colors: {
+                'OD-SPH': '#2563eb',
+                'OD-CYL': '#7c3aed',
+                'OS-SPH': '#dc2626',
+                'OS-CYL': '#ea580c',
+                'OD-Axis': '#16a34a',
+                'OS-Axis': '#0891b2'
+              }
+            },
+            dark: {
+              name: 'Dark Mode',
+              background: 'bg-gray-900',
+              chartBackground: 'bg-gray-800',
+              textPrimary: 'text-gray-100',
+              textSecondary: 'text-gray-300',
+              gridColor: '#374151',
+              axisColor: '#9ca3af',
+              colors: {
+                'OD-SPH': '#60a5fa',
+                'OD-CYL': '#a78bfa',
+                'OS-SPH': '#f87171',
+                'OS-CYL': '#fb923c',
+                'OD-Axis': '#4ade80',
+                'OS-Axis': '#22d3ee'
+              }
+            },
+            ocean: {
+              name: 'Ocean',
+              background: 'bg-slate-50',
+              chartBackground: 'bg-blue-50',
+              textPrimary: 'text-slate-800',
+              textSecondary: 'text-slate-600',
+              gridColor: '#cbd5e1',
+              axisColor: '#64748b',
+              colors: {
+                'OD-SPH': '#0ea5e9',
+                'OD-CYL': '#0284c7',
+                'OS-SPH': '#0891b2',
+                'OS-CYL': '#0d9488',
+                'OD-Axis': '#059669',
+                'OS-Axis': '#047857'
+              }
+            },
+            sunset: {
+              name: 'Sunset',
+              background: 'bg-orange-50',
+              chartBackground: 'bg-amber-50',
+              textPrimary: 'text-amber-900',
+              textSecondary: 'text-amber-700',
+              gridColor: '#fed7aa',
+              axisColor: '#d97706',
+              colors: {
+                'OD-SPH': '#dc2626',
+                'OD-CYL': '#ea580c',
+                'OS-SPH': '#d97706',
+                'OS-CYL': '#ca8a04',
+                'OD-Axis': '#65a30d',
+                'OS-Axis': '#16a34a'
+              }
+            },
+            neon: {
+              name: 'Neon',
+              background: 'bg-black',
+              chartBackground: 'bg-gray-900',
+              textPrimary: 'text-green-400',
+              textSecondary: 'text-green-300',
+              gridColor: '#1f2937',
+              axisColor: '#10b981',
+              colors: {
+                'OD-SPH': '#00ff00',
+                'OD-CYL': '#ff0080',
+                'OS-SPH': '#00ffff',
+                'OS-CYL': '#ffff00',
+                'OD-Axis': '#ff8000',
+                'OS-Axis': '#8000ff'
+              }
+            },
+            medical: {
+              name: 'Medical',
+              background: 'bg-emerald-50',
+              chartBackground: 'bg-white',
+              textPrimary: 'text-emerald-900',
+              textSecondary: 'text-emerald-700',
+              gridColor: '#d1fae5',
+              axisColor: '#059669',
+              colors: {
+                'OD-SPH': '#dc2626',
+                'OD-CYL': '#b91c1c',
+                'OS-SPH': '#0891b2',
+                'OS-CYL': '#0e7490',
+                'OD-Axis': '#059669',
+                'OS-Axis': '#047857'
+              }
+            }
+          };
+
+          const theme = themes[currentTheme];
+
+          const actualData = [
+            { date: '10/10/13', year: 2013, 'OD-SPH': -1.50, 'OD-CYL': -0.25, 'OD-Axis': 110, 'OS-SPH': -2.50, 'OS-CYL': 0.00, 'OS-Axis': 0, type: 'actual' },
+            { date: '07/11/18', year: 2018, 'OD-SPH': -1.50, 'OD-CYL': -0.75, 'OD-Axis': 100, 'OS-SPH': -2.50, 'OS-CYL': -1.00, 'OS-Axis': 105, type: 'actual' },
+            { date: '12/17/20', year: 2020, 'OD-SPH': -2.00, 'OD-CYL': -1.25, 'OD-Axis': 105, 'OS-SPH': -2.50, 'OS-CYL': -0.75, 'OS-Axis': 90, type: 'actual' },
+            { date: '11/18/22', year: 2022, 'OD-SPH': -1.00, 'OD-CYL': -1.75, 'OD-Axis': 105, 'OS-SPH': -2.50, 'OS-CYL': -1.00, 'OS-Axis': 90, type: 'actual' },
+            { date: '07/30/25', year: 2025, 'OD-SPH': -1.75, 'OD-CYL': -1.50, 'OD-Axis': 94, 'OS-SPH': -3.00, 'OS-CYL': -1.25, 'OS-Axis': 86, type: 'actual' }
+          ];
+
+          const predictedData = [
+            { date: '07/30/27', year: 2027, 'OD-SPH': -1.85, 'OD-CYL': -1.65, 'OD-Axis': 92, 'OS-SPH': -3.25, 'OS-CYL': -1.35, 'OS-Axis': 84, type: 'predicted' },
+            { date: '07/30/29', year: 2029, 'OD-SPH': -1.95, 'OD-CYL': -1.80, 'OD-Axis': 90, 'OS-SPH': -3.50, 'OS-CYL': -1.45, 'OS-Axis': 82, type: 'predicted' },
+            { date: '07/30/31', year: 2031, 'OD-SPH': -2.00, 'OD-CYL': -1.95, 'OD-Axis': 88, 'OS-SPH': -3.75, 'OS-CYL': -1.55, 'OS-Axis': 80, type: 'predicted' }
+          ];
+
+          const data = [...actualData, ...predictedData];
+
+          const colors = theme.colors;
+
+          const toggleMetric = (metric) => {
+            setSelectedMetrics(prev => ({
+              ...prev,
+              [metric]: !prev[metric]
+            }));
+          };
+
+          return (
+            <div className={`w-full p-6 ${theme.background} transition-colors duration-300 min-h-screen`}>
+              <div className="flex justify-between items-start mb-6">
+                <h2 className={`text-2xl font-bold ${theme.textPrimary}`}>Glasses Prescription Changes Over Time</h2>
+                
+                <div className="relative">
+                  <select
+                    value={currentTheme}
+                    onChange={(e) => setCurrentTheme(e.target.value)}
+                    className={`px-4 py-2 rounded-lg border ${theme.chartBackground} ${theme.textPrimary} border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 cursor-pointer`}
+                  >
+                    {Object.keys(themes).map(themeKey => (
+                      <option key={themeKey} value={themeKey}>
+                        {themes[themeKey].name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              
+              <div className="mb-6">
+                <h3 className={`text-lg font-semibold ${theme.textSecondary} mb-3`}>Select metrics to display:</h3>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                  {Object.keys(selectedMetrics).map(metric => (
+                    <button
+                      key={metric}
+                      onClick={() => toggleMetric(metric)}
+                      className={`px-3 py-2 rounded-lg border-2 transition-all duration-200 ${
+                        selectedMetrics[metric] 
+                          ? `bg-opacity-10 border-2` 
+                          : `${theme.chartBackground} border-gray-300 ${theme.textSecondary}`
+                      }`}
+                      style={{
+                        backgroundColor: selectedMetrics[metric] ? colors[metric] + '20' : undefined,
+                        borderColor: selectedMetrics[metric] ? colors[metric] : undefined,
+                        color: selectedMetrics[metric] ? colors[metric] : undefined
+                      }}
+                    >
+                      <div className="flex items-center gap-2">
+                        <div 
+                          className="w-3 h-3 rounded-full"
+                          style={{ backgroundColor: colors[metric] }}
+                        ></div>
+                        <span className="font-medium">{metric}</span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className={`${theme.chartBackground} p-4 rounded-lg border transition-colors duration-300`}>
+                <ResponsiveContainer width="100%" height={400}>
+                  <LineChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke={theme.gridColor} />
+                    <XAxis 
+                      dataKey="date" 
+                      stroke={theme.axisColor}
+                      fontSize={12}
+                    />
+                    <YAxis 
+                      yAxisId="main"
+                      stroke={theme.axisColor}
+                      fontSize={12}
+                    />
+                    <YAxis 
+                      yAxisId="axis"
+                      orientation="right"
+                      stroke={theme.axisColor}
+                      fontSize={12}
+                      domain={[0, 180]}
+                    />
+                    <Tooltip 
+                      contentStyle={{
+                        backgroundColor: currentTheme === 'dark' || currentTheme === 'neon' ? '#1f2937' : 'white',
+                        border: `1px solid ${theme.gridColor}`,
+                        borderRadius: '8px',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                        color: currentTheme === 'dark' || currentTheme === 'neon' ? '#f3f4f6' : '#374151'
+                      }}
+                    />
+                    <Legend />
+                    
+                    {selectedMetrics['OD-SPH'] && (
+                      <Line 
+                        yAxisId="main"
+                        type="monotone" 
+                        dataKey="OD-SPH" 
+                        stroke={colors['OD-SPH']} 
+                        strokeWidth={2}
+                        strokeDasharray="5 5"
+                        dot={(props) => {
+                          const { payload } = props;
+                          if (payload?.type === 'predicted') {
+                            return React.createElement('circle', {
+                              ...props,
+                              fill: 'none',
+                              stroke: colors['OD-SPH'],
+                              strokeWidth: 2,
+                              r: 4,
+                              strokeDasharray: '2 2'
+                            });
+                          }
+                          return React.createElement('circle', {
+                            ...props,
+                            fill: colors['OD-SPH'],
+                            stroke: colors['OD-SPH'],
+                            strokeWidth: 2,
+                            r: 4
+                          });
+                        }}
+                        name="OD-SPH (Right Eye Sphere)"
+                      />
+                    )}
+                    {selectedMetrics['OD-CYL'] && (
+                      <Line 
+                        yAxisId="main"
+                        type="monotone" 
+                        dataKey="OD-CYL" 
+                        stroke={colors['OD-CYL']} 
+                        strokeWidth={2}
+                        strokeDasharray="5 5"
+                        dot={(props) => {
+                          const { payload } = props;
+                          if (payload?.type === 'predicted') {
+                            return React.createElement('circle', {
+                              ...props,
+                              fill: 'none',
+                              stroke: colors['OD-CYL'],
+                              strokeWidth: 2,
+                              r: 4,
+                              strokeDasharray: '2 2'
+                            });
+                          }
+                          return React.createElement('circle', {
+                            ...props,
+                            fill: colors['OD-CYL'],
+                            stroke: colors['OD-CYL'],
+                            strokeWidth: 2,
+                            r: 4
+                          });
+                        }}
+                        name="OD-CYL (Right Eye Cylinder)"
+                      />
+                    )}
+                    {selectedMetrics['OS-SPH'] && (
+                      <Line 
+                        yAxisId="main"
+                        type="monotone" 
+                        dataKey="OS-SPH" 
+                        stroke={colors['OS-SPH']} 
+                        strokeWidth={2}
+                        strokeDasharray="5 5"
+                        dot={(props) => {
+                          const { payload } = props;
+                          if (payload?.type === 'predicted') {
+                            return React.createElement('circle', {
+                              ...props,
+                              fill: 'none',
+                              stroke: colors['OS-SPH'],
+                              strokeWidth: 2,
+                              r: 4,
+                              strokeDasharray: '2 2'
+                            });
+                          }
+                          return React.createElement('circle', {
+                            ...props,
+                            fill: colors['OS-SPH'],
+                            stroke: colors['OS-SPH'],
+                            strokeWidth: 2,
+                            r: 4
+                          });
+                        }}
+                        name="OS-SPH (Left Eye Sphere)"
+                      />
+                    )}
+                    {selectedMetrics['OS-CYL'] && (
+                      <Line 
+                        yAxisId="main"
+                        type="monotone" 
+                        dataKey="OS-CYL" 
+                        stroke={colors['OS-CYL']} 
+                        strokeWidth={2}
+                        strokeDasharray="5 5"
+                        dot={(props) => {
+                          const { payload } = props;
+                          if (payload?.type === 'predicted') {
+                            return React.createElement('circle', {
+                              ...props,
+                              fill: 'none',
+                              stroke: colors['OS-CYL'],
+                              strokeWidth: 2,
+                              r: 4,
+                              strokeDasharray: '2 2'
+                            });
+                          }
+                          return React.createElement('circle', {
+                            ...props,
+                            fill: colors['OS-CYL'],
+                            stroke: colors['OS-CYL'],
+                            strokeWidth: 2,
+                            r: 4
+                          });
+                        }}
+                        name="OS-CYL (Left Eye Cylinder)"
+                      />
+                    )}
+                    {selectedMetrics['OD-Axis'] && (
+                      <Line 
+                        yAxisId="axis"
+                        type="monotone" 
+                        dataKey="OD-Axis" 
+                        stroke={colors['OD-Axis']} 
+                        strokeWidth={2}
+                        strokeDasharray="5 5"
+                        dot={(props) => {
+                          const { payload } = props;
+                          if (payload?.type === 'predicted') {
+                            return React.createElement('circle', {
+                              ...props,
+                              fill: 'none',
+                              stroke: colors['OD-Axis'],
+                              strokeWidth: 2,
+                              r: 4,
+                              strokeDasharray: '2 2'
+                            });
+                          }
+                          return React.createElement('circle', {
+                            ...props,
+                            fill: colors['OD-Axis'],
+                            stroke: colors['OD-Axis'],
+                            strokeWidth: 2,
+                            r: 4
+                          });
+                        }}
+                        name="OD-Axis (Right Eye Axis) →"
+                      />
+                    )}
+                    {selectedMetrics['OS-Axis'] && (
+                      <Line 
+                        yAxisId="axis"
+                        type="monotone" 
+                        dataKey="OS-Axis" 
+                        stroke={colors['OS-Axis']} 
+                        strokeWidth={2}
+                        strokeDasharray="5 5"
+                        dot={(props) => {
+                          const { payload } = props;
+                          if (payload?.type === 'predicted') {
+                            return React.createElement('circle', {
+                              ...props,
+                              fill: 'none',
+                              stroke: colors['OS-Axis'],
+                              strokeWidth: 2,
+                              r: 4,
+                              strokeDasharray: '2 2'
+                            });
+                          }
+                          return React.createElement('circle', {
+                            ...props,
+                            fill: colors['OS-Axis'],
+                            stroke: colors['OS-Axis'],
+                            strokeWidth: 2,
+                            r: 4
+                          });
+                        }}
+                        name="OS-Axis (Left Eye Axis) →"
+                      />
+                    )}
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+
+              <div className="mt-6 space-y-4">
+                <div className={`${theme.chartBackground} rounded-lg border`}>
+                  <button
+                    onClick={() => toggleSection('historical')}
+                    className={`w-full p-4 text-left flex items-center justify-between ${theme.textPrimary} hover:opacity-80 transition-opacity`}
+                  >
+                    <h3 className="text-lg font-semibold">Historical Trends (2013-2025)</h3>
+                    <span className="text-xl">{collapsedSections.historical ? '+' : '−'}</span>
+                  </button>
+                  {!collapsedSections.historical && (
+                    <div className="px-4 pb-4">
+                      <ul className={`text-sm ${theme.textSecondary} space-y-1`}>
+                        <li>• <strong>Left eye myopia (OS-SPH)</strong> has gradually worsened from -2.50 to -3.00</li>
+                        <li>• <strong>Right eye myopia (OD-SPH)</strong> fluctuated but remains around -1.50 to -2.00 range</li>
+                        <li>• <strong>Astigmatism (CYL values)</strong> has generally increased in both eyes over time</li>
+                        <li>• <strong>Axis values</strong> have remained relatively stable with minor adjustments</li>
+                      </ul>
+                    </div>
+                  )}
+                </div>
+                
+                <div className={`${theme.chartBackground} rounded-lg border`}>
+                  <button
+                    onClick={() => toggleSection('predictions')}
+                    className={`w-full p-4 text-left flex items-center justify-between ${theme.textPrimary} hover:opacity-80 transition-opacity`}
+                  >
+                    <h3 className="text-lg font-semibold">Future Predictions (2027-2031)</h3>
+                    <span className="text-xl">{collapsedSections.predictions ? '+' : '−'}</span>
+                  </button>
+                  {!collapsedSections.predictions && (
+                    <div className="px-4 pb-4">
+                      <p className={`text-sm ${theme.textSecondary} mb-2`}><em>Based on historical trends - actual results may vary</em></p>
+                      <ul className={`text-sm ${theme.textSecondary} space-y-1`}>
+                        <li>• <strong>Left eye (OS-SPH):</strong> Continued gradual worsening (-3.25 → -3.75)</li>
+                        <li>• <strong>Right eye (OD-SPH):</strong> Slight progression (-1.85 → -2.00)</li>
+                        <li>• <strong>Astigmatism:</strong> Gradual increase in both eyes</li>
+                        <li>• <strong>Axis:</strong> Minor continued adjustments toward lower angles</li>
+                      </ul>
+                      <p className={`text-xs ${theme.textSecondary} opacity-80 mt-2`}>
+                        ⚠️ These are statistical projections only. Regular eye exams are essential for accurate prescriptions.
+                      </p>
+                    </div>
+                  )}
+                </div>
+                
+                <div className={`${theme.chartBackground} rounded-lg border`}>
+                  <button
+                    onClick={() => toggleSection('methodology')}
+                    className={`w-full p-4 text-left flex items-center justify-between ${theme.textPrimary} hover:opacity-80 transition-opacity`}
+                  >
+                    <h3 className="text-lg font-semibold">Prediction Methodology</h3>
+                    <span className="text-xl">{collapsedSections.methodology ? '+' : '−'}</span>
+                  </button>
+                  {!collapsedSections.methodology && (
+                    <div className="px-4 pb-4">
+                      <ul className={`text-sm ${theme.textSecondary} space-y-1`}>
+                        <li>• <strong>OS-SPH:</strong> Linear trend (-0.125 diopters every 2 years)</li>
+                        <li>• <strong>OD-SPH:</strong> Conservative progression based on recent stabilization</li>
+                        <li>• <strong>Cylinder values:</strong> Gradual increase following historical pattern</li>
+                        <li>• <strong>Axis values:</strong> Slow drift based on recent direction changes</li>
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          );
+        };
+
+        ReactDOM.render(React.createElement(GlassesPrescriptionChart), document.getElementById('root'));
+    </script>
+</body>
+</html>
