@@ -15,40 +15,52 @@
   </script>
   <div class="max-w-3xl mx-auto mt-10 p-6 rounded-lg shadow-lg border transition-colors duration-300" id="main-content">
     <h1 class="text-3xl font-bold mb-6 text-center text-blue-400">Netflix Genre IDs</h1>
-    <div class="space-y-8 text-base">
-      <section>
-        <h2 class="text-xl font-semibold mb-2 text-blue-300">Action & Adventure</h2>
-        <ul class="space-y-1">
-          <li><a href="https://www.netflix.com/browse/genre/1365" class="text-blue-400 underline">Action & Adventure</a></li>
-          <li><a href="https://www.netflix.com/browse/genre/77232" class="text-blue-400 underline">Asian Action Movies</a></li>
-          <li><a href="https://www.netflix.com/browse/genre/46576" class="text-blue-400 underline">Classic Action & Adventure</a></li>
-          <li><a href="https://www.netflix.com/browse/genre/43040" class="text-blue-400 underline">Action Comedies</a></li>
-          <li><a href="https://www.netflix.com/browse/genre/43048" class="text-blue-400 underline">Action Thrillers</a></li>
-          <li><a href="https://www.netflix.com/browse/genre/7442" class="text-blue-400 underline">Adventures</a></li>
-          <li><a href="https://www.netflix.com/browse/genre/10118" class="text-blue-400 underline">Comic Book and Superhero Movies</a></li>
-          <li><a href="https://www.netflix.com/browse/genre/7700" class="text-blue-400 underline">Westerns</a></li>
-          <li><a href="https://www.netflix.com/browse/genre/10702" class="text-blue-400 underline">Spy Action & Adventure</a></li>
-          <li><a href="https://www.netflix.com/browse/genre/9584" class="text-blue-400 underline">Crime Action & Adventure</a></li>
-          <li><a href="https://www.netflix.com/browse/genre/11828" class="text-blue-400 underline">Foreign Action & Adventure</a></li>
-          <li><a href="https://www.netflix.com/browse/genre/8985" class="text-blue-400 underline">Martial Arts Movies</a></li>
-          <li><a href="https://www.netflix.com/browse/genre/2125" class="text-blue-400 underline">Military Action & Adventure</a></li>
-        </ul>
-      </section>
-      <section>
-        <h2 class="text-xl font-semibold mb-2 text-blue-300">Anime</h2>
-        <ul class="space-y-1">
-          <li><a href="https://www.netflix.com/browse/genre/7424" class="text-blue-400 underline">Anime</a></li>
-          <li><a href="https://www.netflix.com/browse/genre/11881" class="text-blue-400 underline">Adult Animation</a></li>
-          <li><a href="https://www.netflix.com/browse/genre/2653" class="text-blue-400 underline">Anime Action</a></li>
-          <li><a href="https://www.netflix.com/browse/genre/9302" class="text-blue-400 underline">Anime Comedies</a></li>
-          <li><a href="https://www.netflix.com/browse/genre/452" class="text-blue-400 underline">Anime Dramas</a></li>
-          <li><a href="https://www.netflix.com/browse/genre/3063" class="text-blue-400 underline">Anime Features</a></li>
-          <li><a href="https://www.netflix.com/browse/genre/2729" class="text-blue-400 underline">Anime Sci-Fi</a></li>
-          <li><a href="https://www.netflix.com/browse/genre/10695" class="text-blue-400 underline">Anime Horror</a></li>
-          <li><a href="https://www.netflix.com/browse/genre/11146" class="text-blue-400 underline">Anime Fantasy</a></li>
-          <li><a href="https://www.netflix.com/browse/genre/6721" class="text-blue-400 underline">Anime Series</a></li>
-        </ul>
-      </section>
+    <div class="space-y-4 text-base" id="genre-sections">
+      <!-- Collapsible Section: Action & Adventure (expanded by default) -->
+      <div class="rounded-lg border bg-gray-800">
+        <button onclick="toggleSection('action')" class="w-full p-4 text-left flex items-center justify-between text-blue-300 hover:opacity-80 transition-opacity">
+          <h2 class="text-xl font-semibold">Action & Adventure</h2>
+          <span class="text-xl" id="toggle-action">−</span>
+        </button>
+        <div id="section-action">
+          <ul class="space-y-1 px-4 pb-4">
+            <li><a href="https://www.netflix.com/browse/genre/1365" class="text-blue-400 underline">Action & Adventure</a></li>
+            <li><a href="https://www.netflix.com/browse/genre/77232" class="text-blue-400 underline">Asian Action Movies</a></li>
+            <li><a href="https://www.netflix.com/browse/genre/46576" class="text-blue-400 underline">Classic Action & Adventure</a></li>
+            <li><a href="https://www.netflix.com/browse/genre/43040" class="text-blue-400 underline">Action Comedies</a></li>
+            <li><a href="https://www.netflix.com/browse/genre/43048" class="text-blue-400 underline">Action Thrillers</a></li>
+            <li><a href="https://www.netflix.com/browse/genre/7442" class="text-blue-400 underline">Adventures</a></li>
+            <li><a href="https://www.netflix.com/browse/genre/10118" class="text-blue-400 underline">Comic Book and Superhero Movies</a></li>
+            <li><a href="https://www.netflix.com/browse/genre/7700" class="text-blue-400 underline">Westerns</a></li>
+            <li><a href="https://www.netflix.com/browse/genre/10702" class="text-blue-400 underline">Spy Action & Adventure</a></li>
+            <li><a href="https://www.netflix.com/browse/genre/9584" class="text-blue-400 underline">Crime Action & Adventure</a></li>
+            <li><a href="https://www.netflix.com/browse/genre/11828" class="text-blue-400 underline">Foreign Action & Adventure</a></li>
+            <li><a href="https://www.netflix.com/browse/genre/8985" class="text-blue-400 underline">Martial Arts Movies</a></li>
+            <li><a href="https://www.netflix.com/browse/genre/2125" class="text-blue-400 underline">Military Action & Adventure</a></li>
+          </ul>
+        </div>
+      </div>
+      <!-- Collapsible Section: Anime (collapsed by default) -->
+      <div class="rounded-lg border bg-gray-800">
+        <button onclick="toggleSection('anime')" class="w-full p-4 text-left flex items-center justify-between text-blue-300 hover:opacity-80 transition-opacity">
+          <h2 class="text-xl font-semibold">Anime</h2>
+          <span class="text-xl" id="toggle-anime">+</span>
+        </button>
+        <div id="section-anime" style="display:none;">
+          <ul class="space-y-1 px-4 pb-4">
+            <li><a href="https://www.netflix.com/browse/genre/7424" class="text-blue-400 underline">Anime</a></li>
+            <li><a href="https://www.netflix.com/browse/genre/11881" class="text-blue-400 underline">Adult Animation</a></li>
+            <li><a href="https://www.netflix.com/browse/genre/2653" class="text-blue-400 underline">Anime Action</a></li>
+            <li><a href="https://www.netflix.com/browse/genre/9302" class="text-blue-400 underline">Anime Comedies</a></li>
+            <li><a href="https://www.netflix.com/browse/genre/452" class="text-blue-400 underline">Anime Dramas</a></li>
+            <li><a href="https://www.netflix.com/browse/genre/3063" class="text-blue-400 underline">Anime Features</a></li>
+            <li><a href="https://www.netflix.com/browse/genre/2729" class="text-blue-400 underline">Anime Sci-Fi</a></li>
+            <li><a href="https://www.netflix.com/browse/genre/10695" class="text-blue-400 underline">Anime Horror</a></li>
+            <li><a href="https://www.netflix.com/browse/genre/11146" class="text-blue-400 underline">Anime Fantasy</a></li>
+            <li><a href="https://www.netflix.com/browse/genre/6721" class="text-blue-400 underline">Anime Series</a></li>
+          </ul>
+        </div>
+      </div>
       <section>
         <h2 class="text-xl font-semibold mb-2 text-blue-300">Children & Family Movies</h2>
         <ul class="space-y-1">
@@ -362,5 +374,19 @@
       </section>
     </div>
   </div>
+  <script>
+    // Collapsible logic
+    function toggleSection(name) {
+      const section = document.getElementById('section-' + name);
+      const toggle = document.getElementById('toggle-' + name);
+      if (section.style.display === 'none') {
+        section.style.display = '';
+        toggle.textContent = '−';
+      } else {
+        section.style.display = 'none';
+        toggle.textContent = '+';
+      }
+    }
+  </script>
 </body>
 </html>
