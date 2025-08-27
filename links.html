@@ -8,20 +8,97 @@
   <script src="theme.js"></script>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col items-center justify-start p-6">
+  <!-- Header -->
+  <header class="w-full max-w-xl flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-blue-600">My Links</h1>
+    <div>
+      <select id="themeSelect" class="px-3 py-2 border rounded">
+        <option value="dark">Dark Mode</option>
+        <option value="light">Light Mode</option>
+      </select>
+    </div>
+  </header>
   <div class="w-full max-w-xl">
     <form id="googleSearchForm" class="flex gap-2 mb-4">
-      <input type="text" id="googleSearchInput" placeholder="Google Search" class="px-3 py-2 border rounded w-full" required>
+  <input type="text" id="googleSearchInput" placeholder="Google Search" class="theme-input w-full" required>
       <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded">Search</button>
     </form>
     <h1 class="text-3xl font-bold mb-6 text-center text-blue-600">My Links</h1>
     <form id="linkForm" class="flex gap-2 mb-6">
-      <input type="text" id="linkTitle" placeholder="Title" class="px-3 py-2 border rounded w-1/3" required>
-      <input type="url" id="linkUrl" placeholder="URL" class="px-3 py-2 border rounded w-1/2" required>
+  <input type="text" id="linkTitle" placeholder="Title" class="theme-input w-1/3" required>
+  <input type="url" id="linkUrl" placeholder="URL" class="theme-input w-1/2" required>
       <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Add</button>
     </form>
-    <ul id="linksList" class="space-y-4"></ul>
+    <div id="linksGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-4"></div>
+    <!-- Modal -->
+    <div id="modalOverlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+      <div id="modalBox" class="bg-white rounded-lg shadow-lg p-6 w-full max-w-sm">
+        <h2 id="modalTitle" class="text-xl font-bold mb-4"></h2>
+        <form id="modalForm" class="flex flex-col gap-3">
+          <input type="text" id="modalLinkTitle" placeholder="Title" class="theme-input" required>
+          <input type="url" id="modalLinkUrl" placeholder="URL" class="theme-input" required>
+          <div class="flex gap-2 justify-end">
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Save</button>
+            <button type="button" id="modalCancel" class="bg-gray-400 text-white px-4 py-2 rounded">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
   <script>
+    // Theme logic
+    const themes = {
+      dark: {
+        body: 'bg-gray-900',
+        card: 'bg-gray-800',
+        text: 'text-gray-100',
+        input: 'bg-gray-700 text-gray-100',
+        border: 'border-gray-700',
+        menu: 'bg-gray-800',
+      },
+      light: {
+        body: 'bg-gray-100',
+        card: 'bg-white',
+        text: 'text-gray-900',
+        input: 'bg-white text-gray-900',
+        border: 'border-gray-300',
+        menu: 'bg-white',
+      }
+    };
+    function applyTheme(theme) {
+      const t = themes[theme];
+      document.body.className = `${t.body} min-h-screen flex flex-col items-center justify-start p-6`;
+      document.querySelectorAll('.theme-card').forEach(el => {
+        el.className = `theme-card ${t.card} rounded-lg shadow flex flex-col items-center justify-center h-32 cursor-pointer transition hover:ring-2 hover:ring-blue-400`;
+      });
+      document.querySelectorAll('.theme-text').forEach(el => {
+        el.className = `theme-text ${t.text} text-sm font-semibold text-center`;
+      });
+      document.querySelectorAll('.theme-input').forEach(el => {
+        el.className = `theme-input px-3 py-2 rounded ${t.input} ${t.border}`;
+      });
+      document.querySelectorAll('.theme-border').forEach(el => {
+        el.className = `theme-border ${t.border}`;
+      });
+      document.querySelectorAll('.theme-menu').forEach(el => {
+        el.className = `absolute top-8 right-2 theme-menu theme-border rounded shadow-lg z-10 hidden flex-col ${t.menu}`;
+      });
+      document.getElementById('modalBox').className = `${t.card} rounded-lg shadow-lg p-6 w-full max-w-sm`;
+      document.getElementById('modalTitle').className = `text-xl font-bold mb-4 ${t.text}`;
+    }
+    function getTheme() {
+      return localStorage.getItem('linksTheme') || 'dark';
+    }
+    function setTheme(theme) {
+      localStorage.setItem('linksTheme', theme);
+      applyTheme(theme);
+      document.getElementById('themeSelect').value = theme;
+    }
+    document.getElementById('themeSelect').onchange = function() {
+      setTheme(this.value);
+    };
+    // Initial theme
+    setTheme(getTheme());
     // Google search form handler
     document.getElementById('googleSearchForm').onsubmit = function(e) {
       e.preventDefault();
@@ -40,16 +117,30 @@
     }
     function renderLinks() {
       const links = getLinks();
-      const list = document.getElementById('linksList');
-      list.innerHTML = '';
+      const grid = document.getElementById('linksGrid');
+      grid.innerHTML = '';
       links.forEach((link, idx) => {
-        const li = document.createElement('li');
-        li.className = 'flex items-center gap-2 bg-white p-3 rounded shadow';
-        li.innerHTML = `<a href="${link.url}" target="_blank" class="text-blue-600 font-semibold hover:underline flex-1">${link.title}</a>` +
-          `<button data-edit="${idx}" class="bg-yellow-400 text-white px-2 py-1 rounded">Edit</button>` +
-          `<button data-delete="${idx}" class="bg-red-600 text-white px-2 py-1 rounded">Delete</button>`;
-        list.appendChild(li);
+        const square = document.createElement('div');
+        square.className = 'relative group theme-card';
+        square.innerHTML = `
+          <a href="${link.url}" target="_blank" class="flex flex-col items-center justify-center w-full h-full">
+            <div class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 mb-2">
+              <svg class="w-8 h-8 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 11H9v-1h2v1zm0-2H9V7h2v4z"/></svg>
+            </div>
+            <span class="theme-text">${link.title}</span>
+          </a>
+          <button class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition" data-menu="${idx}">
+            <svg class="w-6 h-6 text-gray-500" fill="currentColor" viewBox="0 0 20 20"><circle cx="4" cy="10" r="2"/><circle cx="10" cy="10" r="2"/><circle cx="16" cy="10" r="2"/></svg>
+          </button>
+          <div class="absolute top-8 right-2 theme-menu theme-border rounded shadow-lg z-10 hidden flex-col" id="menu-${idx}">
+            <button class="px-4 py-2 text-left hover:bg-gray-100 w-full" data-edit="${idx}">Edit</button>
+            <button class="px-4 py-2 text-left hover:bg-gray-100 w-full" data-delete="${idx}">Delete</button>
+            <button class="px-4 py-2 text-left hover:bg-gray-100 w-full" data-add>New</button>
+          </div>
+        `;
+        grid.appendChild(square);
       });
+      applyTheme(getTheme());
     }
     document.getElementById('linkForm').onsubmit = function(e) {
       e.preventDefault();
@@ -62,24 +153,63 @@
       renderLinks();
       this.reset();
     };
-    document.getElementById('linksList').onclick = function(e) {
+    document.getElementById('linksGrid').onclick = function(e) {
+      // Show/hide menu
+      if (e.target.closest('button[data-menu]')) {
+        const idx = e.target.closest('button[data-menu]').dataset.menu;
+        document.querySelectorAll('[id^="menu-"]').forEach(m => m.classList.add('hidden'));
+        document.getElementById('menu-' + idx).classList.toggle('hidden');
+        return;
+      }
+      // Edit
+      if (e.target.dataset.edit !== undefined) {
+        const idx = +e.target.dataset.edit;
+        const links = getLinks();
+        showModal('Edit Link', links[idx].title, links[idx].url, idx);
+        document.getElementById('menu-' + idx).classList.add('hidden');
+        return;
+      }
+      // Delete
       if (e.target.dataset.delete !== undefined) {
         const idx = +e.target.dataset.delete;
         const links = getLinks();
         links.splice(idx, 1);
         saveLinks(links);
         renderLinks();
-      } else if (e.target.dataset.edit !== undefined) {
-        const idx = +e.target.dataset.edit;
-        const links = getLinks();
-        const link = links[idx];
-        document.getElementById('linkTitle').value = link.title;
-        document.getElementById('linkUrl').value = link.url;
-        links.splice(idx, 1);
-        saveLinks(links);
-        renderLinks();
+        return;
+      }
+      // Add new
+      if (e.target.dataset.add !== undefined) {
+        showModal('Add New Link', '', '', null);
+        document.querySelectorAll('[id^="menu-"]').forEach(m => m.classList.add('hidden'));
+        return;
       }
     };
+    // Modal logic
+    function showModal(title, linkTitle, linkUrl, idx) {
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalLinkTitle').value = linkTitle || '';
+      document.getElementById('modalLinkUrl').value = linkUrl || '';
+      document.getElementById('modalOverlay').classList.remove('hidden');
+      document.getElementById('modalForm').onsubmit = function(e) {
+        e.preventDefault();
+        const title = document.getElementById('modalLinkTitle').value.trim();
+        const url = document.getElementById('modalLinkUrl').value.trim();
+        if (!title || !url) return;
+        const links = getLinks();
+        if (idx !== null) {
+          links[idx] = { title, url };
+        } else {
+          links.push({ title, url });
+        }
+        saveLinks(links);
+        renderLinks();
+        document.getElementById('modalOverlay').classList.add('hidden');
+      };
+      document.getElementById('modalCancel').onclick = function() {
+        document.getElementById('modalOverlay').classList.add('hidden');
+      };
+    }
     renderLinks();
   </script>
 </body>
