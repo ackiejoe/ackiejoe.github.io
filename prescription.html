@@ -12,27 +12,13 @@
     <!-- Try Recharts 1.7.1 for better CDN compatibility -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/recharts/1.7.1/Recharts.min.js"></script>
     <script src="theme.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-    <div id="header-include"></div>
     <div id="root"></div>
-    <div id="footer-include"></div>
 
-    <script>
-      // Inject header and footer outside React root
-      document.addEventListener('DOMContentLoaded', function() {
-        fetch('header.html').then(r => r.text()).then(t => {
-          document.getElementById('header-include').innerHTML = t;
-        });
-        fetch('footer.html').then(r => r.text()).then(t => {
-          document.getElementById('footer-include').innerHTML = t;
-        });
-      });
-    </script>
-
-    <script type="text/babel" data-presets="react,env">
+    <script type="text/babel">
         const { useState } = React;
         // Defensive check for Recharts
         if (!window.Recharts) {
@@ -52,12 +38,6 @@
             'OS-CYL': true,
             'OD-Axis': true,
             'OS-Axis': true
-    <div id="footer-include"></div>
-    <script>
-      fetch('footer.html').then(r => r.text()).then(t => {
-        document.getElementById('footer-include').innerHTML = t;
-      });
-    </script>
           });
 
           const [currentTheme, setCurrentTheme] = useState('dark');
