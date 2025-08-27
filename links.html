@@ -61,8 +61,58 @@
     function applyTheme(theme) {
       const t = window.Themes[theme] || window.Themes['dark'];
       document.body.className = `${t.background} min-h-screen flex flex-col items-center justify-start p-6`;
-      // Optionally update other elements here if needed
+      // Header
+      const header = document.querySelector('header');
+      if (header) {
+        header.className = `w-full flex justify-between items-center mb-6 px-8 py-4 ${t.headerBg}`;
+        header.querySelector('h1').className = `text-3xl font-bold ${t.headerText}`;
+      }
+      // Main
+      const main = document.querySelector('main');
+      if (main) {
+        main.className = `w-full max-w-[1100px] mx-auto ${t.mainBg}`;
+      }
+      // Google search input/button
+      const googleInput = document.getElementById('googleSearchInput');
+      if (googleInput) googleInput.className = `${t.inputBg} ${t.inputText} theme-input w-full px-3 py-2 border rounded`;
+      const googleBtn = document.querySelector('#googleSearchForm button');
+      if (googleBtn) googleBtn.className = `${t.buttonPrimaryBg} ${t.buttonPrimaryText} px-4 py-2 rounded`;
+      // Add link form inputs/buttons
+      const linkTitle = document.getElementById('linkTitle');
+      if (linkTitle) linkTitle.className = `${t.inputBg} ${t.inputText} theme-input w-1/3 px-3 py-2 border rounded`;
+      const linkUrl = document.getElementById('linkUrl');
+      if (linkUrl) linkUrl.className = `${t.inputBg} ${t.inputText} theme-input w-1/2 px-3 py-2 border rounded`;
+      const addBtn = document.querySelector('#linkForm button');
+      if (addBtn) addBtn.className = `${t.buttonPrimaryBg} ${t.buttonPrimaryText} px-4 py-2 rounded`;
+      // Cards
+      document.querySelectorAll('.theme-card').forEach(card => {
+        card.className = `relative group theme-card ${t.cardBg} ${t.cardBorder} ${t.cardText} rounded-lg shadow flex flex-col items-center justify-center h-32 cursor-pointer transition hover:ring-2 hover:ring-blue-400`;
+      });
+      document.querySelectorAll('.theme-text').forEach(txt => {
+        txt.className = `theme-text ${t.cardText} text-sm font-semibold text-center`;
+      });
+      // Menus
+      document.querySelectorAll('.theme-menu').forEach(menu => {
+        menu.className = `absolute top-8 right-2 theme-menu theme-border rounded shadow-lg z-10 hidden flex-col ${t.menuBg} ${t.menuText}`;
+      });
+      document.querySelectorAll('.theme-border').forEach(border => {
+        border.className = `theme-border ${t.cardBorder}`;
+      });
+      // Modal
+      const modalBox = document.getElementById('modalBox');
+      if (modalBox) modalBox.className = `${t.modalBg} rounded-lg shadow-lg p-6 w-full max-w-sm`;
+      const modalTitle = document.getElementById('modalTitle');
+      if (modalTitle) modalTitle.className = `text-xl font-bold mb-4 ${t.modalText}`;
+      const modalInput1 = document.getElementById('modalLinkTitle');
+      if (modalInput1) modalInput1.className = `${t.inputBg} ${t.inputText} theme-input px-3 py-2 border rounded`;
+      const modalInput2 = document.getElementById('modalLinkUrl');
+      if (modalInput2) modalInput2.className = `${t.inputBg} ${t.inputText} theme-input px-3 py-2 border rounded`;
+      const modalSaveBtn = document.querySelector('#modalForm button[type="submit"]');
+      if (modalSaveBtn) modalSaveBtn.className = `${t.buttonPrimaryBg} ${t.buttonPrimaryText} px-4 py-2 rounded`;
+      const modalCancelBtn = document.getElementById('modalCancel');
+      if (modalCancelBtn) modalCancelBtn.className = `${t.buttonSecondaryBg} ${t.buttonSecondaryText} px-4 py-2 rounded`;
     }
+    
     function getTheme() {
       return localStorage.getItem('linksTheme') || 'dark';
     }
