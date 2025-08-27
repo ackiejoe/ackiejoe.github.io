@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Links</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="theme.js"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center justify-start p-6">
+  <div class="w-full max-w-xl">
+    <h1 class="text-3xl font-bold mb-6 text-center text-blue-600">My Links</h1>
+    <form id="linkForm" class="flex gap-2 mb-6">
+      <input type="text" id="linkTitle" placeholder="Title" class="px-3 py-2 border rounded w-1/3" required>
+      <input type="url" id="linkUrl" placeholder="URL" class="px-3 py-2 border rounded w-1/2" required>
+      <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Add</button>
+    </form>
+    <ul id="linksList" class="space-y-4"></ul>
+  </div>
+  <script>
+    // Load links from localStorage
+    function getLinks() {
+      return JSON.parse(localStorage.getItem('myLinks') || '[]');
+    }
+    function saveLinks(links) {
+      localStorage.setItem('myLinks', JSON.stringify(links));
+    }
+    function renderLinks() {
+      const links = getLinks();
+      const list = document.getElementById('linksList');
+      list.innerHTML = '';
+      links.forEach((link, idx) => {
+        const li = document.createElement('li');
+        li.className = 'flex items-center gap-2 bg-white p-3 rounded shadow';
+        li.innerHTML = `<a href="${link.url}" target="_blank" class="text-blue-600 font-semibold hover:underline flex-1">${link.title}</a>` +
+          `<button data-edit="${idx}" class="bg-yellow-400 text-white px-2 py-1 rounded">Edit</button>` +
+          `<button data-delete="${idx}" class="bg-red-600 text-white px-2 py-1 rounded">Delete</button>`;
+        list.appendChild(li);
+      });
+    }
+    document.getElementById('linkForm').onsubmit = function(e) {
+      e.preventDefault();
+      const title = document.getElementById('linkTitle').value.trim();
+      const url = document.getElementById('linkUrl').value.trim();
+      if (!title || !url) return;
+      const links = getLinks();
+      links.push({ title, url });
+      saveLinks(links);
+      renderLinks();
+      this.reset();
+    };
+    document.getElementById('linksList').onclick = function(e) {
+      if (e.target.dataset.delete !== undefined) {
+        const idx = +e.target.dataset.delete;
+        const links = getLinks();
+        links.splice(idx, 1);
+        saveLinks(links);
+        renderLinks();
+      } else if (e.target.dataset.edit !== undefined) {
+        const idx = +e.target.dataset.edit;
+        const links = getLinks();
+        const link = links[idx];
+        document.getElementById('linkTitle').value = link.title;
+        document.getElementById('linkUrl').value = link.url;
+        links.splice(idx, 1);
+        saveLinks(links);
+        renderLinks();
+      }
+    };
+    renderLinks();
+  </script>
+</body>
+</html>
