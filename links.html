@@ -9,8 +9,8 @@
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col items-center justify-start p-6">
   <!-- Header -->
-  <header class="w-full max-w-xl flex justify-between items-center mb-6">
-    <h1 class="text-3xl font-bold text-blue-600">My Links</h1>
+  <header class="w-full flex justify-between items-center mb-6 px-8 py-4 bg-blue-900">
+    <h1 class="text-3xl font-bold text-white">My Links</h1>
     <div>
       <select id="themeSelect" class="px-3 py-2 border rounded">
         <option value="dark">Dark Mode</option>
@@ -18,7 +18,7 @@
       </select>
     </div>
   </header>
-  <div class="w-full max-w-xl">
+  <main class="w-full max-w-[1100px] mx-auto">
     <form id="googleSearchForm" class="flex gap-2 mb-4">
   <input type="text" id="googleSearchInput" placeholder="Google Search" class="theme-input w-full" required>
       <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded">Search</button>
@@ -29,7 +29,7 @@
   <input type="url" id="linkUrl" placeholder="URL" class="theme-input w-1/2" required>
       <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Add</button>
     </form>
-    <div id="linksGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-4"></div>
+  <div id="linksGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-4"></div>
     <!-- Modal -->
     <div id="modalOverlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
       <div id="modalBox" class="bg-white rounded-lg shadow-lg p-6 w-full max-w-sm">
@@ -44,7 +44,7 @@
         </form>
       </div>
     </div>
-  </div>
+  </main>
   <script>
     // Theme logic
     const themes = {
@@ -153,12 +153,16 @@
       renderLinks();
       this.reset();
     };
+    // Menu logic
+    let openMenu = null;
     document.getElementById('linksGrid').onclick = function(e) {
       // Show/hide menu
       if (e.target.closest('button[data-menu]')) {
         const idx = e.target.closest('button[data-menu]').dataset.menu;
         document.querySelectorAll('[id^="menu-"]').forEach(m => m.classList.add('hidden'));
-        document.getElementById('menu-' + idx).classList.toggle('hidden');
+        const menu = document.getElementById('menu-' + idx);
+        menu.classList.toggle('hidden');
+        openMenu = menu.classList.contains('hidden') ? null : menu;
         return;
       }
       // Edit
@@ -166,7 +170,8 @@
         const idx = +e.target.dataset.edit;
         const links = getLinks();
         showModal('Edit Link', links[idx].title, links[idx].url, idx);
-        document.getElementById('menu-' + idx).classList.add('hidden');
+        if (openMenu) openMenu.classList.add('hidden');
+        openMenu = null;
         return;
       }
       // Delete
@@ -176,15 +181,25 @@
         links.splice(idx, 1);
         saveLinks(links);
         renderLinks();
+        if (openMenu) openMenu.classList.add('hidden');
+        openMenu = null;
         return;
       }
       // Add new
       if (e.target.dataset.add !== undefined) {
         showModal('Add New Link', '', '', null);
-        document.querySelectorAll('[id^="menu-"]').forEach(m => m.classList.add('hidden'));
+        if (openMenu) openMenu.classList.add('hidden');
+        openMenu = null;
         return;
       }
     };
+    // Close menu on outside click
+    document.addEventListener('click', function(e) {
+      if (openMenu && !e.target.closest('.group')) {
+        openMenu.classList.add('hidden');
+        openMenu = null;
+      }
+    });
     // Modal logic
     function showModal(title, linkTitle, linkUrl, idx) {
       document.getElementById('modalTitle').textContent = title;
