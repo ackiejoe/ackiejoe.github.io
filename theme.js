@@ -1,4 +1,4 @@
-window.GlassesThemes = {
+window.Themes = {
   default: {
     name: 'Light Mode',
     background: 'bg-white',

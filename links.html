@@ -46,45 +46,22 @@
     </div>
   </main>
   <script>
-    // Theme logic
-    const themes = {
-      dark: {
-        body: 'bg-gray-900',
-        card: 'bg-gray-800',
-        text: 'text-gray-100',
-        input: 'bg-gray-700 text-gray-100',
-        border: 'border-gray-700',
-        menu: 'bg-gray-800',
-      },
-      light: {
-        body: 'bg-gray-100',
-        card: 'bg-white',
-        text: 'text-gray-900',
-        input: 'bg-white text-gray-900',
-        border: 'border-gray-300',
-        menu: 'bg-white',
-      }
-    };
+    // Dynamically populate theme options from window.Themes
+    function populateThemeOptions() {
+      const themeSelect = document.getElementById('themeSelect');
+      themeSelect.innerHTML = '';
+      Object.entries(window.Themes).forEach(([key, value]) => {
+        const opt = document.createElement('option');
+        opt.value = key;
+        opt.textContent = value.name || key;
+        themeSelect.appendChild(opt);
+      });
+    }
+    // Use window.Themes for theme logic
     function applyTheme(theme) {
-      const t = themes[theme];
-      document.body.className = `${t.body} min-h-screen flex flex-col items-center justify-start p-6`;
-      document.querySelectorAll('.theme-card').forEach(el => {
-        el.className = `theme-card ${t.card} rounded-lg shadow flex flex-col items-center justify-center h-32 cursor-pointer transition hover:ring-2 hover:ring-blue-400`;
-      });
-      document.querySelectorAll('.theme-text').forEach(el => {
-        el.className = `theme-text ${t.text} text-sm font-semibold text-center`;
-      });
-      document.querySelectorAll('.theme-input').forEach(el => {
-        el.className = `theme-input px-3 py-2 rounded ${t.input} ${t.border}`;
-      });
-      document.querySelectorAll('.theme-border').forEach(el => {
-        el.className = `theme-border ${t.border}`;
-      });
-      document.querySelectorAll('.theme-menu').forEach(el => {
-        el.className = `absolute top-8 right-2 theme-menu theme-border rounded shadow-lg z-10 hidden flex-col ${t.menu}`;
-      });
-      document.getElementById('modalBox').className = `${t.card} rounded-lg shadow-lg p-6 w-full max-w-sm`;
-      document.getElementById('modalTitle').className = `text-xl font-bold mb-4 ${t.text}`;
+      const t = window.Themes[theme] || window.Themes['dark'];
+      document.body.className = `${t.background} min-h-screen flex flex-col items-center justify-start p-6`;
+      // Optionally update other elements here if needed
     }
     function getTheme() {
       return localStorage.getItem('linksTheme') || 'dark';
@@ -97,7 +74,8 @@
     document.getElementById('themeSelect').onchange = function() {
       setTheme(this.value);
     };
-    // Initial theme
+    // Initial theme and options
+    populateThemeOptions();
     setTheme(getTheme());
     // Google search form handler
     document.getElementById('googleSearchForm').onsubmit = function(e) {
