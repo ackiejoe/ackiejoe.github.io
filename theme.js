@@ -1,6 +1,6 @@
 window.GlassesThemes = {
   default: {
-    name: 'Default',
+    name: 'Light Mode',
     background: 'bg-white',
     chartBackground: 'bg-gray-50',
     textPrimary: 'text-gray-800',
@@ -99,6 +99,91 @@ window.GlassesThemes = {
       'OS-CYL': '#0e7490',
       'OD-Axis': '#059669',
       'OS-Axis': '#047857'
+    }
+  },
+  forest: {
+    name: 'Forest',
+    background: 'bg-green-50',
+    chartBackground: 'bg-green-100',
+    textPrimary: 'text-green-900',
+    textSecondary: 'text-green-700',
+    gridColor: '#bbf7d0',
+    axisColor: '#166534',
+    colors: {
+      'OD-SPH': '#22c55e',
+      'OD-CYL': '#16a34a',
+      'OS-SPH': '#65a30d',
+      'OS-CYL': '#84cc16',
+      'OD-Axis': '#166534',
+      'OS-Axis': '#4ade80'
+    }
+  },
+  lavender: {
+    name: 'Lavender',
+    background: 'bg-purple-50',
+    chartBackground: 'bg-purple-100',
+    textPrimary: 'text-purple-900',
+    textSecondary: 'text-purple-700',
+    gridColor: '#e9d5ff',
+    axisColor: '#7c3aed',
+    colors: {
+      'OD-SPH': '#a78bfa',
+      'OD-CYL': '#c4b5fd',
+      'OS-SPH': '#f472b6',
+      'OS-CYL': '#f9a8d4',
+      'OD-Axis': '#7c3aed',
+      'OS-Axis': '#a21caf'
+    }
+  },
+  solarized: {
+    name: 'Solarized',
+    background: 'bg-yellow-50',
+    chartBackground: 'bg-yellow-100',
+    textPrimary: 'text-yellow-900',
+    textSecondary: 'text-yellow-700',
+    gridColor: '#fef9c3',
+    axisColor: '#ca8a04',
+    colors: {
+      'OD-SPH': '#facc15',
+      'OD-CYL': '#fde047',
+      'OS-SPH': '#f59e42',
+      'OS-CYL': '#fbbf24',
+      'OD-Axis': '#ca8a04',
+      'OS-Axis': '#eab308'
+    }
+  },
+  retro: {
+    name: 'Retro',
+    background: 'bg-pink-50',
+    chartBackground: 'bg-pink-100',
+    textPrimary: 'text-pink-900',
+    textSecondary: 'text-pink-700',
+    gridColor: '#fbcfe8',
+    axisColor: '#db2777',
+    colors: {
+      'OD-SPH': '#f472b6',
+      'OD-CYL': '#fb7185',
+      'OS-SPH': '#fbbf24',
+      'OS-CYL': '#f59e42',
+      'OD-Axis': '#db2777',
+      'OS-Axis': '#be185d'
+    }
+  },
+  monochrome: {
+    name: 'Monochrome',
+    background: 'bg-gray-100',
+    chartBackground: 'bg-gray-300',
+    textPrimary: 'text-gray-900',
+    textSecondary: 'text-gray-700',
+    gridColor: '#d1d5db',
+    axisColor: '#6b7280',
+    colors: {
+      'OD-SPH': '#6b7280',
+      'OD-CYL': '#9ca3af',
+      'OS-SPH': '#374151',
+      'OS-CYL': '#d1d5db',
+      'OD-Axis': '#111827',
+      'OS-Axis': '#6b7280'
     }
   }
 };
