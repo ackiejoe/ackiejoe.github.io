@@ -16,7 +16,19 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
+    <div id="header-include"></div>
     <div id="root"></div>
+    <div id="footer-include"></div>
+
+    <script>
+      // Inject header and footer outside React root
+      fetch('header.html').then(r => r.text()).then(t => {
+        document.getElementById('header-include').innerHTML = t;
+      });
+      fetch('footer.html').then(r => r.text()).then(t => {
+        document.getElementById('footer-include').innerHTML = t;
+      });
+    </script>
 
     <script type="text/babel">
         const { useState } = React;
@@ -38,6 +50,12 @@
             'OS-CYL': true,
             'OD-Axis': true,
             'OS-Axis': true
+    <div id="footer-include"></div>
+    <script>
+      fetch('footer.html').then(r => r.text()).then(t => {
+        document.getElementById('footer-include').innerHTML = t;
+      });
+    </script>
           });
 
           const [currentTheme, setCurrentTheme] = useState('dark');

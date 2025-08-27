@@ -8,6 +8,12 @@
   <script src="theme.js"></script>
 </head>
 <body>
+  <div id="header-include"></div>
+  <script>
+    fetch('header.html').then(r => r.text()).then(t => {
+      document.getElementById('header-include').innerHTML = t;
+    });
+  </script>
   <script>
     // Use dark theme from theme.js
     const theme = window.GlassesThemes.dark;
@@ -38,6 +44,12 @@
             <li><a href="https://www.netflix.com/browse/genre/8985" class="text-blue-400 underline">Martial Arts Movies</a></li>
             <li><a href="https://www.netflix.com/browse/genre/2125" class="text-blue-400 underline">Military Action & Adventure</a></li>
           </ul>
+  <div id="footer-include"></div>
+  <script>
+    fetch('footer.html').then(r => r.text()).then(t => {
+      document.getElementById('footer-include').innerHTML = t;
+    });
+  </script>
         </div>
       </div>
       <!-- Collapsible Section: Anime (collapsed by default) -->
