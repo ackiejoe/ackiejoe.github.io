@@ -3,7 +3,7 @@
 <head>
   <link href="https://cdn.jsdelivr.net/npm/daisyui@4.10.2/dist/full.css" rel="stylesheet" type="text/css" />
   <meta charset="UTF-8">
-  <title>My Links</title>
+  <title>Home</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -21,7 +21,7 @@
 <body class="bg-base-200 min-h-screen flex flex-col items-center justify-start p-6">
   <!-- Header -->
   <header class="w-full flex justify-between items-center mb-6 px-8 py-4 bg-base-300">
-    <h1 class="text-3xl font-bold text-primary">My Links</h1>
+    <h1 class="text-3xl font-bold text-primary">Home</h1>
     <div>
       <select id="themeSelect" class="select select-bordered w-full max-w-xs"></select>
     </div>
@@ -31,12 +31,12 @@
   <input type="text" id="googleSearchInput" placeholder="Google Search" class="input input-bordered w-full" required>
   <button type="submit" class="btn btn-success">Search</button>
     </form>
-    <h1 class="text-3xl font-bold mb-6 text-center text-blue-600">My Links</h1>
+
     <div id="linksGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-4"></div>
     <!-- Modal -->
     <div id="modalOverlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-      <div id="modalBox" class="bg-white rounded-lg shadow-lg p-8 w-full max-w-md flex flex-col items-center">
-        <h2 id="modalTitle" class="text-2xl font-bold mb-6 text-center w-full"></h2>
+      <div id="modalBox" class="modal-box bg-base-100 text-base-content rounded-lg shadow-lg p-8 w-full max-w-md flex flex-col items-center">
+        <h2 id="modalTitle" class="text-2xl font-bold mb-6 text-center w-full text-primary"></h2>
         <form id="modalForm" class="w-full flex flex-col gap-4 items-center">
           <input type="text" id="modalLinkTitle" name="modalLinkTitle" placeholder="Title" class="input input-bordered w-full text-lg">
           <input type="text" id="modalLinkUrl" name="modalLinkUrl" placeholder="URL (optional)" class="input input-bordered w-full text-lg">
@@ -104,15 +104,13 @@
       const grid = document.getElementById('linksGrid');
       grid.innerHTML = '';
       if (links.length === 0) {
-        // Show blank card with large + icon and empty state message
+        // Show blank badge with large + icon and empty state message
         const square = document.createElement('div');
-  square.className = 'card bg-base-100 shadow-xl border border-base-300 flex flex-col items-center justify-center cursor-pointer';
-        square.style.width = '200px';
-        square.style.height = '200px';
+        square.className = 'badge badge-neutral flex flex-col items-center justify-center cursor-pointer w-[200px] h-[200px] text-lg gap-2 relative';
         square.innerHTML = `
           <button id="addFirstLink" type="button" class="flex flex-col items-center justify-center w-full h-full" tabindex="0" aria-label="Add Link">
-            <div class="flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 mb-2">
-              <svg class="w-12 h-12 text-blue-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 5v14m7-7H5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div class="flex items-center justify-center w-16 h-16 rounded-full bg-base-300 mb-2">
+              <svg class="w-12 h-12 text-neutral" fill="currentColor" viewBox="0 0 24 24"><path d="M12 5v14m7-7H5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </div>
             <span class="theme-text text-lg">Add Link</span>
           </button>
@@ -126,15 +124,12 @@
         const addBtn = document.getElementById('addFirstLink');
         addBtn.onclick = function(e) {
           e.preventDefault();
-          console.log('Add Link button clicked');
           showModal('Add New Link', '', '', null);
         };
       } else {
         links.forEach((link, idx) => {
           const square = document.createElement('div');
-          square.className = 'card bg-base-100 shadow-xl border border-base-300 flex flex-col items-center justify-center';
-          square.style.width = '200px';
-          square.style.height = '200px';
+          square.className = 'badge badge-neutral flex flex-col items-center justify-center w-[200px] h-[200px] text-lg gap-2 relative';
           // Get favicon using DuckDuckGo's favicon API
           let favicon = '';
           try {
@@ -145,18 +140,20 @@
           }
           square.innerHTML = `
             <a href="${link.url}" target="_blank" class="flex flex-col items-center justify-center w-full h-full">
-              <div class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 mb-2">
-                ${favicon ? `<img src="${favicon}" alt="icon" class="w-8 h-8 rounded" onerror="this.style.display='none'">` : `<svg class="w-8 h-8 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 11H9v-1h2v1zm0-2H9V7h2v4z"/></svg>`}
+              <div class="flex items-center justify-center w-12 h-12 rounded-full bg-base-300 mb-2">
+                ${favicon ? `<img src="${favicon}" alt="icon" class="w-8 h-8 rounded" onerror="this.style.display='none'">` : `<svg class="w-8 h-8 text-neutral" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 11H9v-1h2v1zm0-2H9V7h2v4z"/></svg>`}
               </div>
               <span class="theme-text">${link.title}</span>
             </a>
             <button class="absolute top-2 right-2 transition z-20" data-menu="${idx}">
               <svg class="w-6 h-6 text-gray-500" fill="currentColor" viewBox="0 0 20 20"><circle cx="4" cy="10" r="2"/><circle cx="10" cy="10" r="2"/><circle cx="16" cy="10" r="2"/></svg>
             </button>
-            <div class="absolute -top-2 left-1/2 -translate-x-1/2 custom-menu theme-border rounded shadow-lg z-30 flex-col min-w-[120px]" id="menu-${idx}" style="display:none;">
-              <button class="px-4 py-2 text-left hover:bg-gray-100 w-full" data-edit="${idx}">Edit</button>
-              <button class="px-4 py-2 text-left hover:bg-gray-100 w-full" data-delete="${idx}">Delete</button>
-              <button class="px-4 py-2 text-left hover:bg-gray-100 w-full" data-add>New</button>
+            <div class="absolute top-12 right-2 chat chat-end z-30 min-w-[140px]" id="menu-${idx}" style="display:none;">
+              <div class="chat-bubble chat-bubble-neutral flex flex-col gap-2 p-2">
+                <button class="btn btn-sm btn-ghost text-left w-full" data-edit="${idx}">Edit</button>
+                <button class="btn btn-sm btn-ghost text-left w-full" data-delete="${idx}">Delete</button>
+                <button class="btn btn-sm btn-ghost text-left w-full" data-add>New</button>
+              </div>
             </div>
           `;
           grid.appendChild(square);

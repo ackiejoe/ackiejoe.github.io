@@ -1,29 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.10.2/dist/full.css" rel="stylesheet" type="text/css" />
   <meta charset="UTF-8">
   <title>App Launcher</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="theme.js"></script>
+  <script src="daisyui-themes.js"></script>
 </head>
 <body>
-  <script>
-    // Use dark theme from theme.js
-    const theme = window.Themes.dark;
-    document.body.className = `${theme.background} min-h-screen flex items-center justify-center transition-colors duration-300`;
-  </script>
-  <div class="shadow-lg rounded-lg p-8 w-full max-w-md border" style="background-color: #1f2937;">
-    <h1 class="text-3xl font-bold mb-6 text-center text-blue-400">Launcher</h1>
-    <ul class="space-y-4">
-      <li>
-        <a href="prescription.html" class="block px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 transition font-semibold text-center shadow">Glasses Prescription Tracker</a>
-      </li>
-      <li>
-        <a href="netflix_IDs.html" class="block px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700 transition font-semibold text-center shadow">Netflix ID</a>
-      </li>
-      <!-- Add more links to other HTML files as needed -->
-    </ul>
+  <div class="min-h-screen flex flex-col items-center justify-start p-6 bg-base-200">
+    <header class="w-full flex justify-between items-center mb-6 px-8 py-4 bg-base-300">
+      <h1 class="text-3xl font-bold text-primary">Launcher</h1>
+      <div>
+        <select id="themeSelect" class="select select-bordered w-full max-w-xs"></select>
+      </div>
+    </header>
+    <main class="w-full max-w-md mx-auto">
+      <ul class="space-y-4">
+        <li>
+          <a href="prescription.html" class="block px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 transition font-semibold text-center shadow">Glasses Prescription Tracker</a>
+        </li>
+        <li>
+          <a href="netflix_IDs.html" class="block px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700 transition font-semibold text-center shadow">Netflix ID</a>
+        </li>
+        <li>
+          <a href="links.html" class="block px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700 transition font-semibold text-center shadow">Homepage</a>
+        </li>
+        <!-- Add more links to other HTML files as needed -->
+      </ul>
+      <nav class="mt-4">
+        <!-- removed duplicate link -->
+      </nav>
+    </main>
   </div>
+  <script>
+    // Dynamically populate theme options from window.DaisyUIThemes
+    function populateThemeOptions() {
+      const themeSelect = document.getElementById('themeSelect');
+      themeSelect.innerHTML = '';
+      window.DaisyUIThemes.forEach(theme => {
+        const opt = document.createElement('option');
+        opt.value = theme;
+        opt.textContent = theme.charAt(0).toUpperCase() + theme.slice(1);
+        themeSelect.appendChild(opt);
+      });
+    }
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+    }
+    function getTheme() {
+      return localStorage.getItem('launcherTheme') || 'dark';
+    }
+    function setTheme(theme) {
+      localStorage.setItem('launcherTheme', theme);
+      applyTheme(theme);
+      document.getElementById('themeSelect').value = theme;
+    }
+    document.getElementById('themeSelect').onchange = function() {
+      setTheme(this.value);
+    };
+    // Initial theme and options
+    populateThemeOptions();
+    setTheme(getTheme());
+  </script>
 </body>
 </html>
