@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Sugar Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+        }
+        .table-container {
+            overflow-x: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            min-width: 800px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+        }
+        .header-group {
+            background-color: #45a049;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .date-col {
+            font-weight: bold;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>Blood Sugar Readings</h1>
+    <div class="table-container">
+        <table id="bloodSugarTable">
+            <thead>
+                <tr>
+                    <th rowspan="2">Date</th>
+                    <th colspan="2" class="header-group">Breakfast</th>
+                    <th colspan="2" class="header-group">Lunch</th>
+                    <th colspan="2" class="header-group">Supper</th>
+                    <th colspan="2" class="header-group">Bed</th>
+                    <th colspan="2" class="header-group">Key</th>
+                </tr>
+                <tr>
+                    <th>Before</th>
+                    <th>2 Hours After</th>
+                    <th>Before</th>
+                    <th>2 Hours After</th>
+                    <th>Before</th>
+                    <th>2 Hours After</th>
+                    <th>Before</th>
+                    <th>2 Hours After</th>
+                    <th>Before</th>
+                    <th>2 Hours After</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <!-- Data will be loaded here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        fetch('data.json')
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.getElementById('tableBody');
+                data.forEach(row => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td class="date-col">${row.date || ''}</td>
+                        <td>${row.breakfast.before || ''}</td>
+                        <td>${row.breakfast.after || ''}</td>
+                        <td>${row.lunch.before || ''}</td>
+                        <td>${row.lunch.after || ''}</td>
+                        <td>${row.supper.before || ''}</td>
+                        <td>${row.supper.after || ''}</td>
+                        <td>${row.bed.before || ''}</td>
+                        <td>${row.bed.after || ''}</td>
+                        <td>${row.key.before || ''}</td>
+                        <td>${row.key.after || ''}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            })
+            .catch(error => console.error('Error loading data:', error));
+    </script>
+</body>
+</html>
