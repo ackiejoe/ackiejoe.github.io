@@ -86,10 +86,10 @@
         function getBeforeColor(value) {
             if (!value) return '';
             const num = parseFloat(value);
-            if (num <= 2) return 'background-color: #ffcccc;'; // red
-            if (num === 3) return 'background-color: #ffff99;'; // yellow
-            if (num >= 4 && num <= 7) return 'background-color: #ccffcc;'; // green
-            if (num === 8) return 'background-color: #ffff99;'; // yellow
+            if (num <= 2.9) return 'background-color: #ffcccc;'; // red
+            if (num >= 3 && num <= 3.9) return 'background-color: #ffff99;'; // yellow
+            if (num >= 4 && num <= 7.9) return 'background-color: #ccffcc;'; // green
+            if (num >= 8 && num <= 8.9) return 'background-color: #ffff99;'; // yellow
             if (num >= 9) return 'background-color: #ffcccc;'; // red
             return '';
         }
@@ -97,10 +97,10 @@
         function getAfterColor(value) {
             if (!value) return '';
             const num = parseFloat(value);
-            if (num <= 3) return 'background-color: #ffcccc;'; // red
-            if (num === 4) return 'background-color: #ffff99;'; // yellow
-            if (num >= 5 && num <= 10) return 'background-color: #ccffcc;'; // green
-            if (num === 11) return 'background-color: #ffff99;'; // yellow
+            if (num <= 3.9) return 'background-color: #ffcccc;'; // red
+            if (num >= 4 && num <= 4.9) return 'background-color: #ffff99;'; // yellow
+            if (num >= 5 && num <= 10.9) return 'background-color: #ccffcc;'; // green
+            if (num >= 11 && num <= 11.9) return 'background-color: #ffff99;'; // yellow
             if (num >= 12) return 'background-color: #ffcccc;'; // red
             return '';
         }
