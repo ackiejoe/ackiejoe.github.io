@@ -20,5 +20,5 @@
   {"date": "16/11/2025", "breakfast": {"before": "8.2", "after": ""}, "lunch": {"before": "", "after": ""}, "supper": {"before": "", "after": ""}, "bed": {"before": "", "after": ""}, "key": {"before": "", "after": ""}},
   {"date": "19/11/2025", "breakfast": {"before": "", "after": ""}, "lunch": {"before": "6.9", "after": "7.3"}, "supper": {"before": "", "after": ""}, "bed": {"before": "", "after": ""}, "key": {"before": "", "after": ""}},
   {"date": "20/11/2025", "breakfast": {"before": "", "after": "6.8"}, "lunch": {"before": "", "after": ""}, "supper": {"before": "5.9", "after": ""}, "bed": {"before": "", "after": ""}, "key": {"before": "", "after": ""}},
-  {"date": "", "breakfast": {"before": "", "after": ""}, "lunch": {"before": "", "after": "7.2"}, "supper": {"before": "", "after": "9.1"}, "bed": {"before": "", "after": ""}, "key": {"before": "", "after": ""}}
+  {"date": "21/11/2025", "breakfast": {"before": "", "after": ""}, "lunch": {"before": "", "after": "7.2"}, "supper": {"before": "", "after": "9.1"}, "bed": {"before": "", "after": ""}, "key": {"before": "", "after": ""}}
 ]

@@ -121,8 +121,8 @@
                         <td style="${getAfterColor(row.supper.after)}">${row.supper.after || ''}</td>
                         <td style="${getBeforeColor(row.bed.before)}">${row.bed.before || ''}</td>
                         <td style="${getAfterColor(row.bed.after)}">${row.bed.after || ''}</td>
-                        <td>${row.key.before || ''}</td>
-                        <td>${row.key.after || ''}</td>
+                        <td style="${getBeforeColor(row.key.before)}">${row.key.before || ''}</td>
+                        <td style="${getAfterColor(row.key.after)}">${row.key.after || ''}</td>
                     `;
                     tbody.appendChild(tr);
                 });
