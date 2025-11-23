@@ -83,6 +83,28 @@
     </div>
 
     <script>
+        function getBeforeColor(value) {
+            if (!value) return '';
+            const num = parseFloat(value);
+            if (num <= 2) return 'background-color: #ffcccc;'; // red
+            if (num === 3) return 'background-color: #ffff99;'; // yellow
+            if (num >= 4 && num <= 7) return 'background-color: #ccffcc;'; // green
+            if (num === 8) return 'background-color: #ffff99;'; // yellow
+            if (num >= 9) return 'background-color: #ffcccc;'; // red
+            return '';
+        }
+
+        function getAfterColor(value) {
+            if (!value) return '';
+            const num = parseFloat(value);
+            if (num <= 3) return 'background-color: #ffcccc;'; // red
+            if (num === 4) return 'background-color: #ffff99;'; // yellow
+            if (num >= 5 && num <= 10) return 'background-color: #ccffcc;'; // green
+            if (num === 11) return 'background-color: #ffff99;'; // yellow
+            if (num >= 12) return 'background-color: #ffcccc;'; // red
+            return '';
+        }
+
         fetch('data.json')
             .then(response => response.json())
             .then(data => {
@@ -91,14 +113,14 @@
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
                         <td class="date-col">${row.date || ''}</td>
-                        <td>${row.breakfast.before || ''}</td>
-                        <td>${row.breakfast.after || ''}</td>
-                        <td>${row.lunch.before || ''}</td>
-                        <td>${row.lunch.after || ''}</td>
-                        <td>${row.supper.before || ''}</td>
-                        <td>${row.supper.after || ''}</td>
-                        <td>${row.bed.before || ''}</td>
-                        <td>${row.bed.after || ''}</td>
+                        <td style="${getBeforeColor(row.breakfast.before)}">${row.breakfast.before || ''}</td>
+                        <td style="${getAfterColor(row.breakfast.after)}">${row.breakfast.after || ''}</td>
+                        <td style="${getBeforeColor(row.lunch.before)}">${row.lunch.before || ''}</td>
+                        <td style="${getAfterColor(row.lunch.after)}">${row.lunch.after || ''}</td>
+                        <td style="${getBeforeColor(row.supper.before)}">${row.supper.before || ''}</td>
+                        <td style="${getAfterColor(row.supper.after)}">${row.supper.after || ''}</td>
+                        <td style="${getBeforeColor(row.bed.before)}">${row.bed.before || ''}</td>
+                        <td style="${getAfterColor(row.bed.after)}">${row.bed.after || ''}</td>
                         <td>${row.key.before || ''}</td>
                         <td>${row.key.after || ''}</td>
                     `;
